@@ -93,9 +93,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CoursesPageResponse'
+                $ref: '#/components/schemas/CoursesPageResponse'
 
   /courses/{id}:
     get:

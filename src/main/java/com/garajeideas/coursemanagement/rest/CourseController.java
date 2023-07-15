@@ -5,6 +5,8 @@ import com.garajeideas.coursemanagement.openapi.web.rest.dtos.Course;
 import com.garajeideas.coursemanagement.openapi.web.rest.dtos.CoursesPageResponse;
 import com.garajeideas.coursemanagement.openapi.web.rest.dtos.Student;
 import com.garajeideas.coursemanagement.openapi.web.rest.dtos.StudentsPageResponse;
+import com.garajeideas.coursemanagement.service.CourseService;
+import com.garajeideas.coursemanagement.service.mapper.CourseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,9 @@ import java.util.List;
 @Slf4j
 public class CourseController implements CoursesApi {
 
+
+	private final CourseMapper courseMapper;
+	private final CourseService courseService;
 
 	@Override
 	public ResponseEntity<Course> addCourse(Course course) {
@@ -41,8 +46,9 @@ public class CourseController implements CoursesApi {
 	}
 
 	@Override
-	public ResponseEntity<List<CoursesPageResponse>> getCourses(Integer page, Integer pageSize, String name, OffsetDateTime startDate, OffsetDateTime endDate) {
-		return null;
+	public ResponseEntity<CoursesPageResponse> getCourses(Integer page, Integer pageSize, String name, OffsetDateTime startDate, OffsetDateTime endDate) {
+		return ResponseEntity
+				.ok(courseMapper.toPageResponse(courseService.getCourses(page, pageSize, name, startDate, endDate)));
 	}
 
 	@Override
