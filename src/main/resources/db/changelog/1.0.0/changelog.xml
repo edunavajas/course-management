@@ -8,7 +8,7 @@
 
     <changeSet id="initial" author="edu.navajas">
 
-        <createTable tableName="users">
+        <createTable tableName="user">
             <column name="id" type="bigint" >
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -18,13 +18,13 @@
             <column name="password" type="varchar(60)"/>
         </createTable>
 
-        <createTable tableName="authorities">
+        <createTable tableName="authority">
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
         </createTable>
 
-        <createTable tableName="users_authorities">
+        <createTable tableName="user_authority">
             <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -33,25 +33,25 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="user_id, authority_name" tableName="users_authorities"/>
+        <addPrimaryKey columnNames="user_id, authority_name" tableName="user_authority"/>
 
         <addForeignKeyConstraint baseColumnNames="authority_name"
-                                 baseTableName="users_authorities"
+                                 baseTableName="user_authority"
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
-                                 referencedTableName="authorities"/>
+                                 referencedTableName="authority"/>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="users_authorities"
+                                 baseTableName="user_authority"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="users"/>
+                                 referencedTableName="user"/>
 
         <addNotNullConstraint   columnName="password"
                                 columnDataType="varchar(60)"
-                                tableName="users"/>
+                                tableName="user"/>
 
-        <createTable tableName="students">
+        <createTable tableName="student">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -73,7 +73,7 @@
         </createTable>
 
 
-        <createTable tableName="courses">
+        <createTable tableName="course">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -94,7 +94,7 @@
             </column>
         </createTable>
         <!--   Restriccion: No permitir duplicidad de un curso    -->
-        <addUniqueConstraint columnNames="name" constraintName="uq_name" tableName="courses"/>
+        <addUniqueConstraint columnNames="name" constraintName="uq_name" tableName="course"/>
 
         <createTable tableName="course_student">
             <column name="id" type="int" autoIncrement="true">
@@ -114,11 +114,11 @@
         <!--Restricción onDelete="RESTRICT" -> No permitir borrar un curso que tenga uno o más alumnos-->
         <addForeignKeyConstraint baseColumnNames="course_id" baseTableName="course_student"
                                  constraintName="fk_course_student_to_course"
-                                 referencedColumnNames="id" referencedTableName="courses"
+                                 referencedColumnNames="id" referencedTableName="course"
                                  onDelete="RESTRICT"/>
         <addForeignKeyConstraint baseColumnNames="student_id" baseTableName="course_student"
                                  constraintName="fk_course_student_to_student"
-                                 referencedColumnNames="id" referencedTableName="students"/>
+                                 referencedColumnNames="id" referencedTableName="student"/>
     </changeSet>
 
 </databaseChangeLog>

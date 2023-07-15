@@ -17,7 +17,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class CoursesController implements CoursesApi {
+public class CourseController implements CoursesApi {
 
 
 	@Override
