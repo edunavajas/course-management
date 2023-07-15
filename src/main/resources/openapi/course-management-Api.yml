@@ -1,0 +1,457 @@
+openapi: 3.0.3
+info:
+  title: Swagger Course management 3.0
+  description: This is a sample School API for managing courses and students
+  contact:
+    email: navajascortes.eduardo@gmail.com
+  version: 1.0.0
+servers:
+  - url: http:localhost:8080
+tags:
+  - name: courses
+    description: Manage courses
+  - name: students
+    description: Manage courses
+paths:
+  /auth:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate a user
+      operationId: authenticateUser
+      requestBody:
+        description: Authentication request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+        '401':
+          description: Unauthorized
+  /courses:
+    post:
+      tags:
+        - courses
+      summary: Add a course
+      operationId: addCourse
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+        '201':
+          description: Course created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '400':
+          description: Invalid input
+
+    get:
+      tags:
+        - courses
+      summary: Retrieve courses by start date or end date
+      operationId: getCourses
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: name
+          in: query
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: end_date
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Course list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CoursesPageResponse'
+
+  /courses/{id}:
+    get:
+      tags:
+        - courses
+      summary: Retrieve a course by ID
+      operationId: getCourseById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Course found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        '404':
+          description: Course not found
+
+    put:
+      tags:
+        - courses
+      summary: Update a course
+      operationId: updateCourse
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+        '200':
+          description: Course updated
+        '400':
+          description: Invalid input
+        '404':
+          description: Course not found
+
+    delete:
+      tags:
+        - courses
+      summary: Delete a course
+      operationId: deleteCourse
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Course deleted
+        '400':
+          description: Course can't be deleted (it has one or more students)
+        '404':
+          description: Course not found
+
+  /courses/{courseId}/students/:
+    post:
+      tags:
+        - courses
+      summary: Enroll a student in a course
+      operationId: enrollStudentInCourse
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentsPageResponse'
+      responses:
+        '201':
+          description: Student enrolled
+        '400':
+          description: Invalid input
+        '404':
+          description: Course not found
+    get:
+      tags:
+        - courses
+      summary: Retrieve students in a course
+      operationId: getStudentsInCourse
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Student list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+        '404':
+          description: Course not found
+  /courses/{courseId}/students/{studentId}:
+    delete:
+      tags:
+        - courses
+      summary: Unenroll a student from a course
+      operationId: unenrollStudentFromCourse
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Student unenrolled
+        '400':
+          description: Invalid input
+        '404':
+          description: Course not found
+
+  /students:
+    post:
+      tags:
+        - students
+      summary: Add a student
+      operationId: addStudent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        '201':
+          description: Student created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        '400':
+          description: Invalid input
+
+    get:
+      tags:
+        - students
+      summary: Retrieve students by name or birth date
+      operationId: getStudents
+      parameters:
+        - name: name
+          in: query
+          schema:
+            type: string
+        - name: birth_date
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Student list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentsPageResponse'
+
+  /students/{id}:
+    get:
+      tags:
+        - students
+      summary: Retrieve a student by ID
+      operationId: getStudentById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Student found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+        '404':
+          description: Student not found
+
+    put:
+      tags:
+        - students
+      summary: Update a student
+      operationId: updateStudent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        '200':
+          description: Student updated
+        '400':
+          description: Invalid input
+        '404':
+          description: Student not found
+
+    delete:
+      tags:
+        - students
+      summary: Delete a student
+      operationId: deleteStudent
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Student deleted
+        '400':
+          description: Student can't be deleted (he/she is enrolled in one or more courses)
+        '404':
+          description: Student not found
+
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    AuthenticationRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+
+    AuthenticationResponse:
+      type: object
+      properties:
+        jwt:
+          type: string
+    CoursesPageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Course'
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        students:
+          type: array
+          items:
+            $ref: '#/components/schemas/Student'
+      required:
+        - name
+        - start_date
+        - end_date
+    StudentsPageResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Student'
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        totalItems:
+          type: integer
+        totalPages:
+          type: integer
+    Student:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        birth_date:
+          type: string
+          format: date
+        courses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Course'
+      required:
+        - name
+        - birth_date
+
+security:
+  - Bearer: []
+

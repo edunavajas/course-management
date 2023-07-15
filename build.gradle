@@ -1,14 +1,15 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.1.1'
-	id 'io.spring.dependency-management' version '1.1.0'
+	id 'org.springframework.boot' version '2.7.13'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'org.openapi.generator' version '5.2.0'
 }
 
 group = 'com.garajeideas'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+	sourceCompatibility = '1.8'
 }
 
 configurations {
@@ -21,7 +22,28 @@ repositories {
 	mavenCentral()
 }
 
+openApiGenerate {
+	generatorName = 'spring'
+	inputSpec = "${projectDir}/src/main/resources/openapi/course-management-Api.yml"
+	apiPackage = 'com.garajeideas.coursemanagement.openapi.web.rest'
+	modelPackage = 'com.garajeideas.coursemanagement.openapi.web.rest.dtos'
+	configOptions = [
+			dateLibrary                   : 'java8',
+			interfaceOnly                 : 'true',
+			skipDefaultInterface          : 'true',
+			additionalModelTypeAnnotations: '@lombok.AllArgsConstructor @lombok.Builder @lombok.NoArgsConstructor'
+	]
+}
+
+sourceSets {
+	main.java.srcDirs += 'build/generate-resources/main/src/main/java'
+}
+
 dependencies {
+	implementation 'io.springfox:springfox-swagger2:2.9.2'
+	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+	implementation 'org.openapitools:jackson-databind-nullable:0.2.1'
+	///
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
