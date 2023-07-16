@@ -67,7 +67,7 @@ paths:
           in: query
           schema:
             type: integer
-            default: 1
+            default: 0
         - name: pageSize
           in: query
           schema:
@@ -79,6 +79,7 @@ paths:
             type: string
         - name: start_date
           in: query
+          description: Start date in ISO-8601 format
           schema:
             type: string
             format: date-time

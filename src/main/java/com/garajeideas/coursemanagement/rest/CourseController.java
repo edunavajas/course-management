@@ -5,11 +5,13 @@ import com.garajeideas.coursemanagement.openapi.web.rest.dtos.Course;
 import com.garajeideas.coursemanagement.openapi.web.rest.dtos.CoursesPageResponse;
 import com.garajeideas.coursemanagement.openapi.web.rest.dtos.Student;
 import com.garajeideas.coursemanagement.openapi.web.rest.dtos.StudentsPageResponse;
+import com.garajeideas.coursemanagement.security.AuthoritiesConstants;
 import com.garajeideas.coursemanagement.service.CourseService;
 import com.garajeideas.coursemanagement.service.mapper.CourseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 
@@ -46,6 +48,7 @@ public class CourseController implements CoursesApi {
 	}
 
 	@Override
+	@PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
 	public ResponseEntity<CoursesPageResponse> getCourses(Integer page, Integer pageSize, String name, OffsetDateTime startDate, OffsetDateTime endDate) {
 		return ResponseEntity
 				.ok(courseMapper.toPageResponse(courseService.getCourses(page, pageSize, name, startDate, endDate)));
