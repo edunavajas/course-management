@@ -1,5 +1,8 @@
 package com.garajeideas.coursemanagement.config;
 
+import com.garajeideas.coursemanagement.security.jwt.JWTConfigurer;
+import com.garajeideas.coursemanagement.security.jwt.JWTFilter;
+import com.garajeideas.coursemanagement.security.jwt.TokenProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -9,8 +12,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -21,6 +26,8 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 @Import(SecurityProblemSupport.class)
 @AllArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private TokenProvider tokenProvider;
 
     @Bean
     public CorsFilter corsFilter() {
@@ -42,10 +49,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        JWTFilter customFilter = new JWTFilter(tokenProvider);
+        http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
+
         http
                 .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
                 .antMatchers("/auth").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                .and()
+                .apply(securityConfigurerAdapter());
+    }
+
+    public JWTConfigurer securityConfigurerAdapter() {
+        return new JWTConfigurer(tokenProvider);
     }
 }
