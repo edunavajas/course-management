@@ -453,9 +453,6 @@ components:
         end_date:
           type: string
           format: date-time
-        registration_date:
-          type: string
-          format: date-time
       required:
         - name
         - start_date
@@ -524,9 +521,6 @@ components:
         document_number:
           type: string
         birth_date:
-          type: string
-          format: date
-        registration_date:
           type: string
           format: date
       required:

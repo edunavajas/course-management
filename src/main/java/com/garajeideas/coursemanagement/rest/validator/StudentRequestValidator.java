@@ -22,13 +22,13 @@ public class StudentRequestValidator implements Validator {
         StudentRequest studentRequest = (StudentRequest) target;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "The student name is required");
-        if (studentRequest.getFirstName().length() < 3) {
-            errors.rejectValue("firstName", "The student name must be at least 3 characters long");
+        if (!studentRequest.getFirstName().matches(".*\\S.*\\S.*\\S.*")) {
+            errors.rejectValue("firstName", "The student name must be at least 3 non-whitespace characters");
         }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", "The student surname is required");
-        if (studentRequest.getLastName().length() < 2) {
-            errors.rejectValue("lastName", "The student surname must be at least 2 characters long");
+        if (!studentRequest.getLastName().matches(".*\\S.*\\S.*")) {
+            errors.rejectValue("lastName", "The student surname must be at least 2 non-whitespace characters");
         }
 
         if (studentRequest.getBirthDate() == null) {

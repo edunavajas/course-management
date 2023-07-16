@@ -25,4 +25,12 @@
         <createSequence sequenceName="course_student_seq" startValue="11" incrementBy="1"/>
     </changeSet>
 
+    <!-- Para poder filtrar sin acentos -->
+    <changeSet id="1" author="edu.navajas">
+        <sql>
+            CREATE
+            EXTENSION IF NOT EXISTS unaccent;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

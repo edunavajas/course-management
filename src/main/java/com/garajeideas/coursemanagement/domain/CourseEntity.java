@@ -3,13 +3,18 @@ package com.garajeideas.coursemanagement.domain;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.garajeideas.coursemanagement.rest.validator.ThreeNonWhitespaceCharacters;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;
@@ -34,7 +39,7 @@ public class CourseEntity implements Serializable {
     private Long id;
 
     @NotBlank(message = "The course name is required")
-    @Size(min = 3, message = "The course name must be at least 3 characters long")
+    @ThreeNonWhitespaceCharacters(message = "The course name must have at least 3 non-whitespace characters")
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
@@ -44,7 +49,7 @@ public class CourseEntity implements Serializable {
     private Integer maxStudentCount;
 
     @NotNull(message = "The start date is required")
-    @FutureOrPresent(message = "The start date must be equal to or later than the current date")
+    @FutureOrPresent(message = "The start date must be later than the current date")
     @Column(name = "start_date", nullable = false)
     private Instant startDate;
 
@@ -52,7 +57,7 @@ public class CourseEntity implements Serializable {
     @Column(name = "end_date", nullable = false)
     private Instant endDate;
 
-    @NotNull(message = "The registration date is required")
+    @CreationTimestamp
     @Column(name = "registration_date", nullable = false)
     private Instant registrationDate;
 

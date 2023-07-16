@@ -9,5 +9,7 @@ public interface CourseStudentService {
 
     void enrollStudentInCourse(Long courseId, Long studentId);
 
+    int getActiveStudentsNumberByCourseId(Long courseId);
+
     void unenrollStudentFromCourse(Long courseId, Long studentId);
 }

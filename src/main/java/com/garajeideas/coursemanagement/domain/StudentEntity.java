@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -48,6 +49,7 @@ public class StudentEntity implements Serializable {
     @Column(name = "birth_date", nullable = false)
     private Instant birthDate;
 
+    @CreationTimestamp
     @Column(name = "registration_date", nullable = false)
     private Instant registrationDate;
 

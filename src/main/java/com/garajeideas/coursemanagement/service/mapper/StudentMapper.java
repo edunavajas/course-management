@@ -24,7 +24,6 @@ public interface StudentMapper {
     StudentResponse toResponse(Student student);
 
     @Mapping(source = "birthDate", target = "birthDate", qualifiedByName = "localDateToInstant")
-    @Mapping(source = "registrationDate", target = "registrationDate", qualifiedByName = "localDateToInstant")
     Student toDTO(StudentRequest studentRequest);
 
     @Named("instantToLocalDate")

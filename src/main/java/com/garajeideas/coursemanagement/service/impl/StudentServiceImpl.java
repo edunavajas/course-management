@@ -5,8 +5,10 @@ import com.garajeideas.coursemanagement.dtos.Student;
 import com.garajeideas.coursemanagement.dtos.StudentPage;
 import com.garajeideas.coursemanagement.jpa.mapper.StudentEntityMapper;
 import com.garajeideas.coursemanagement.jpa.repository.StudentJpaRepository;
+import com.garajeideas.coursemanagement.rest.exception.DuplicateStudentException;
 import com.garajeideas.coursemanagement.rest.exception.StudentNotFoundException;
 import com.garajeideas.coursemanagement.service.StudentService;
+import com.garajeideas.coursemanagement.service.specification.StudentSpecification;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,7 +33,8 @@ public class StudentServiceImpl implements StudentService {
     public StudentPage getStudents(Integer page, Integer pageSize, String firstName, String lastName, LocalDate birthDate) {
         Pageable pageable = PageRequest.of(page, pageSize);
 
-        Page<StudentEntity> studentsPage = studentJpaRepository.findAll(pageable);
+        StudentSpecification spec = new StudentSpecification(firstName, lastName, birthDate);
+        Page<StudentEntity> studentsPage = studentJpaRepository.findAll(spec, pageable);
 
         List<StudentEntity> students = studentsPage.getContent();
 
@@ -47,7 +50,16 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student addStudent(Student student) {
         StudentEntity studentEntity = studentEntityMapper.toEntity(student);
+        findDuplicates(studentEntity);
         return studentEntityMapper.toDTO(studentJpaRepository.save(studentEntity));
+    }
+
+    private void findDuplicates(StudentEntity studentEntity) {
+        StudentSpecification spec = new StudentSpecification(studentEntity.getFirstName(), studentEntity.getLastName(), null);
+        List<StudentEntity> students = studentJpaRepository.findAll(spec);
+        if (!students.isEmpty()) {
+            throw new DuplicateStudentException();
+        }
     }
 
     @Override
@@ -56,6 +68,8 @@ public class StudentServiceImpl implements StudentService {
                 .map(existingEntity -> {
                     StudentEntity updatedEntity = studentEntityMapper.toEntity(student);
                     updatedEntity.setId(existingEntity.getId());
+                    updatedEntity.setRegistrationDate(existingEntity.getRegistrationDate());
+                    findDuplicates(updatedEntity);
                     return updatedEntity;
                 })
                 .orElseThrow(() -> new StudentNotFoundException(id));

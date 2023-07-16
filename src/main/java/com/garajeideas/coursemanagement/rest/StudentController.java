@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 
 @Controller
@@ -30,7 +31,7 @@ public class StudentController implements StudentsApi {
     }
 
     @Override
-    public ResponseEntity<StudentResponse> addStudent(StudentRequest studentRequest) {
+    public ResponseEntity<StudentResponse> addStudent(@Valid StudentRequest studentRequest) {
         StudentResponse studentResponse = (studentMapper.toResponse(
                 (studentService.addStudent(studentMapper.toDTO(studentRequest)))));
         return ResponseEntity.ok().body(studentResponse);
@@ -56,7 +57,7 @@ public class StudentController implements StudentsApi {
     }
 
     @Override
-    public ResponseEntity<StudentResponse> updateStudent(Long id, StudentRequest studentRequest) {
+    public ResponseEntity<StudentResponse> updateStudent(Long id, @Valid StudentRequest studentRequest) {
         return ResponseEntity.ok(studentMapper.toResponse(studentService.updateStudent(id, studentMapper.toDTO(studentRequest))));
     }
 }
