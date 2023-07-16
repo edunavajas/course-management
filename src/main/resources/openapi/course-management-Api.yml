@@ -273,7 +273,21 @@ paths:
       summary: Retrieve students by name or birth date
       operationId: getStudents
       parameters:
-        - name: name
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: pageSize
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: first_name
+          in: query
+          schema:
+            type: string
+        - name: last_name
           in: query
           schema:
             type: string
@@ -288,9 +302,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/StudentsPageResponse'
+                $ref: '#/components/schemas/StudentsPageResponse'
 
   /students/{id}:
     get:
@@ -336,6 +348,10 @@ paths:
       responses:
         '200':
           description: Student updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponse'
         '400':
           description: Invalid input
         '404':
@@ -482,30 +498,42 @@ components:
         id:
           type: integer
           format: int64
-        name:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        document_number:
           type: string
         birth_date:
           type: string
           format: date
-        course:
-          type: array
-          items:
-            $ref: '#/components/schemas/CourseResponse'
+        registration_date:
+          type: string
+          format: date
       required:
-        - name
+        - first_name
+        - last_name
         - birth_date
     StudentRequest:
       type: object
       properties:
-        name:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        document_number:
           type: string
         birth_date:
           type: string
           format: date
+        registration_date:
+          type: string
+          format: date
       required:
-        - name
+        - first_name
+        - last_name
         - birth_date
 
 security:
-  - Bearer: []
+  - Bearer: [ ]
 

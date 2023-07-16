@@ -6,7 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -22,22 +25,29 @@ public class StudentEntity implements Serializable {
     private static final long serialVersionUID = -6171775932178901032L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_seq")
+    @SequenceGenerator(name = "student_seq", sequenceName = "student_seq", allocationSize = 1, initialValue = 21)
     @Column(name = "id")
     private Long id;
 
     @NotBlank(message = "The student's name is required")
     @Size(min = 3, message = "The student's name must be at least 3 characters long")
-    @Column(name = "first_name", nullable = false, length = 255)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @NotBlank(message = "The student's last name is required")
     @Size(min = 2, message = "The student's last name must be at least 2 characters long")
-    @Column(name = "last_name", nullable = false, length = 255)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "document_number")
+    private String documentNumber;
 
     @NotNull(message = "The student's birth date is required")
     @Past(message = "The birth date must be before the current date")
     @Column(name = "birth_date", nullable = false)
     private Instant birthDate;
+
+    @Column(name = "registration_date", nullable = false)
+    private Instant registrationDate;
 }

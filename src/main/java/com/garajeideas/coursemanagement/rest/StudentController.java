@@ -1,46 +1,62 @@
 package com.garajeideas.coursemanagement.rest;
 
 import com.garajeideas.coursemanagement.openapi.web.rest.StudentsApi;
-import com.garajeideas.coursemanagement.openapi.web.rest.dtos.Student;
 import com.garajeideas.coursemanagement.openapi.web.rest.dtos.StudentRequest;
 import com.garajeideas.coursemanagement.openapi.web.rest.dtos.StudentResponse;
 import com.garajeideas.coursemanagement.openapi.web.rest.dtos.StudentsPageResponse;
+import com.garajeideas.coursemanagement.rest.validator.StudentRequestValidator;
+import com.garajeideas.coursemanagement.service.StudentService;
+import com.garajeideas.coursemanagement.service.mapper.StudentMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 public class StudentController implements StudentsApi {
 
+    private final StudentMapper studentMapper;
+    private final StudentService studentService;
 
-	@Override
-	public ResponseEntity<StudentResponse> addStudent(StudentRequest studentRequest) {
-		return null;
-	}
+    @InitBinder("studentRequest")
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(new StudentRequestValidator());
+    }
 
-	@Override
-	public ResponseEntity<Void> deleteStudent(Long id) {
-		return null;
-	}
+    @Override
+    public ResponseEntity<StudentResponse> addStudent(StudentRequest studentRequest) {
+        StudentResponse studentResponse = (studentMapper.toResponse(
+                (studentService.addStudent(studentMapper.toDTO(studentRequest)))));
+        return ResponseEntity.ok().body(studentResponse);
+    }
 
-	@Override
-	public ResponseEntity<StudentResponse> getStudentById(Long id) {
-		return null;
-	}
+    @Override
+    public ResponseEntity<Void> deleteStudent(Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.noContent().build();
+    }
 
-	@Override
-	public ResponseEntity<List<StudentsPageResponse>> getStudents(String name, LocalDate birthDate) {
-		return null;
-	}
+    @Override
+    public ResponseEntity<StudentResponse> getStudentById(Long id) {
+        return ResponseEntity.ok(studentMapper.toResponse(studentService.getStudentById(id)));
 
-	@Override
-	public ResponseEntity<Void> updateStudent(Long id, StudentRequest studentRequest) {
-		return null;
-	}
+    }
+
+    @Override
+    public ResponseEntity<StudentsPageResponse> getStudents(Integer page, Integer pageSize, String firstName, String lastName, LocalDate birthDate) {
+        return ResponseEntity
+                .ok(studentMapper.toPageResponse(studentService.getStudents(page, pageSize, firstName, lastName, birthDate)));
+
+    }
+
+    @Override
+    public ResponseEntity<StudentResponse> updateStudent(Long id, StudentRequest studentRequest) {
+        return ResponseEntity.ok(studentMapper.toResponse(studentService.updateStudent(id, studentMapper.toDTO(studentRequest))));
+    }
 }
