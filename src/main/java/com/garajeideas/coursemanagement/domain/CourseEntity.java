@@ -1,5 +1,8 @@
 package com.garajeideas.coursemanagement.domain;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,19 +13,24 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 @Table(name = "course")
 public class CourseEntity implements Serializable {
 
     private static final long serialVersionUID = -6171775932178901032L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_seq")
+    @SequenceGenerator(name = "course_seq", sequenceName = "course_seq", allocationSize = 1, initialValue = 11)
     @Column(name = "id")
     private Long id;
 
@@ -49,6 +57,7 @@ public class CourseEntity implements Serializable {
     @Column(name = "registration_date", nullable = false)
     private Instant registrationDate;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
-    private List<CourseStudentEntity> students;
+    @OneToMany(mappedBy = "courseId", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<CourseStudentEntity> courseStudents;
 }

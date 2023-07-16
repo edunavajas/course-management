@@ -2,6 +2,8 @@ package com.garajeideas.coursemanagement.rest;
 
 import com.garajeideas.coursemanagement.openapi.web.rest.StudentsApi;
 import com.garajeideas.coursemanagement.openapi.web.rest.dtos.Student;
+import com.garajeideas.coursemanagement.openapi.web.rest.dtos.StudentRequest;
+import com.garajeideas.coursemanagement.openapi.web.rest.dtos.StudentResponse;
 import com.garajeideas.coursemanagement.openapi.web.rest.dtos.StudentsPageResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +20,7 @@ public class StudentController implements StudentsApi {
 
 
 	@Override
-	public ResponseEntity<Student> addStudent(Student student) {
+	public ResponseEntity<StudentResponse> addStudent(StudentRequest studentRequest) {
 		return null;
 	}
 
@@ -28,7 +30,7 @@ public class StudentController implements StudentsApi {
 	}
 
 	@Override
-	public ResponseEntity<Student> getStudentById(Long id) {
+	public ResponseEntity<StudentResponse> getStudentById(Long id) {
 		return null;
 	}
 
@@ -38,7 +40,7 @@ public class StudentController implements StudentsApi {
 	}
 
 	@Override
-	public ResponseEntity<Void> updateStudent(Long id, Student student) {
+	public ResponseEntity<Void> updateStudent(Long id, StudentRequest studentRequest) {
 		return null;
 	}
 }

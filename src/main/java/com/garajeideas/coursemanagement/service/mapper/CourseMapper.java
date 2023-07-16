@@ -1,16 +1,16 @@
 package com.garajeideas.coursemanagement.service.mapper;
 
 import com.garajeideas.coursemanagement.domain.CourseEntity;
+import com.garajeideas.coursemanagement.dtos.Course;
 import com.garajeideas.coursemanagement.dtos.CoursePage;
-import com.garajeideas.coursemanagement.openapi.web.rest.dtos.Course;
+import com.garajeideas.coursemanagement.openapi.web.rest.dtos.CourseRequest;
+import com.garajeideas.coursemanagement.openapi.web.rest.dtos.CourseResponse;
 import com.garajeideas.coursemanagement.openapi.web.rest.dtos.CoursesPageResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 
 @Mapper(componentModel = "spring", imports = { java.time.OffsetDateTime.class, java.time.ZoneId.class })
 public interface CourseMapper {
@@ -19,8 +19,18 @@ public interface CourseMapper {
 
 	@Mapping(source = "startDate", target = "startDate", qualifiedByName = "instantToOffsetDateTime")
 	@Mapping(source = "endDate", target = "endDate", qualifiedByName = "instantToOffsetDateTime")
-	Course toCourse(CourseEntity courseEntity);
+	@Mapping(source = "registrationDate", target = "registrationDate", qualifiedByName = "instantToOffsetDateTime")
+	CourseResponse toResponse(Course course);
 
+	@Mapping(source = "startDate", target = "startDate", qualifiedByName = "offsetDateTimeToInstant")
+	@Mapping(source = "endDate", target = "endDate", qualifiedByName = "offsetDateTimeToInstant")
+	@Mapping(source = "registrationDate", target = "registrationDate", qualifiedByName = "offsetDateTimeToInstant")
+	Course toDTO(CourseRequest courseRequest);
+
+	@Named("instantToLocalDate")
+	default LocalDate mapInstantToLocalDate(Instant instant) {
+		return instant == null ? null : instant.atZone(ZoneId.systemDefault()).toLocalDate();
+	}
 	@Named("instantToOffsetDateTime")
 	default OffsetDateTime map(Instant instant) {
 		return instant == null ? null : OffsetDateTime.ofInstant(instant, ZoneOffset.UTC);

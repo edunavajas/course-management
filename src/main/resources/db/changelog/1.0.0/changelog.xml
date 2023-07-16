@@ -9,7 +9,7 @@
     <changeSet id="initial" author="edu.navajas">
 
         <createTable tableName="user">
-            <column name="id" type="bigint" >
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="username" type="varchar(50)">
@@ -52,7 +52,7 @@
                                 tableName="user"/>
 
         <createTable tableName="student">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="first_name" type="varchar(255)">
@@ -74,7 +74,7 @@
 
 
         <createTable tableName="course">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
@@ -93,11 +93,12 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
         <!--   Restriccion: No permitir duplicidad de un curso    -->
         <addUniqueConstraint columnNames="name" constraintName="uq_name" tableName="course"/>
 
         <createTable tableName="course_student">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="course_id" type="int">

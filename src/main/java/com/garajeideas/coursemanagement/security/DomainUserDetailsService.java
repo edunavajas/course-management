@@ -1,11 +1,9 @@
 package com.garajeideas.coursemanagement.security;
 
 import com.garajeideas.coursemanagement.domain.UserEntity;
-import com.garajeideas.coursemanagement.repository.UserJpaRepository;
+import com.garajeideas.coursemanagement.jpa.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package com.garajeideas.coursemanagement.repository;
+package com.garajeideas.coursemanagement.jpa.repository;
 
 import com.garajeideas.coursemanagement.domain.UserEntity;
 import org.springframework.data.jpa.repository.EntityGraph;

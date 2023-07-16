@@ -46,14 +46,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Course'
+              $ref: '#/components/schemas/CourseRequest'
       responses:
         '201':
           description: Course created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Course'
+                $ref: '#/components/schemas/CourseResponse'
         '400':
           description: Invalid input
 
@@ -115,7 +115,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Course'
+                $ref: '#/components/schemas/CourseResponse'
         '404':
           description: Course not found
 
@@ -136,10 +136,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Course'
+              $ref: '#/components/schemas/CourseRequest'
       responses:
         '200':
           description: Course updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseResponse'
         '400':
           description: Invalid input
         '404':
@@ -211,7 +215,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Student'
+                  $ref: '#/components/schemas/StudentResponse'
         '404':
           description: Course not found
   /courses/{courseId}/students/{studentId}:
@@ -252,14 +256,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Student'
+              $ref: '#/components/schemas/StudentRequest'
       responses:
         '201':
           description: Student created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Student'
+                $ref: '#/components/schemas/StudentResponse'
         '400':
           description: Invalid input
 
@@ -307,7 +311,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Student'
+                $ref: '#/components/schemas/StudentResponse'
         '404':
           description: Student not found
 
@@ -328,7 +332,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Student'
+              $ref: '#/components/schemas/StudentRequest'
       responses:
         '200':
           description: Student updated
@@ -386,7 +390,7 @@ components:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/Course'
+            $ref: '#/components/schemas/CourseResponse'
         page:
           type: integer
         pageSize:
@@ -395,7 +399,7 @@ components:
           type: integer
         totalPages:
           type: integer
-    Course:
+    CourseResponse:
       type: object
       properties:
         id:
@@ -403,16 +407,39 @@ components:
           format: int64
         name:
           type: string
+        max_student_count:
+          type: integer
+          format: int64
         start_date:
           type: string
           format: date-time
         end_date:
           type: string
           format: date-time
-        students:
-          type: array
-          items:
-            $ref: '#/components/schemas/Student'
+        registration_date:
+          type: string
+          format: date-time
+      required:
+        - name
+        - start_date
+        - end_date
+    CourseRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        max_student_count:
+          type: integer
+          format: int64
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        registration_date:
+          type: string
+          format: date-time
       required:
         - name
         - start_date
@@ -423,7 +450,7 @@ components:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/Student'
+            $ref: '#/components/schemas/StudentResponse'
         page:
           type: integer
         pageSize:
@@ -432,7 +459,24 @@ components:
           type: integer
         totalPages:
           type: integer
-    Student:
+    CourseStudents:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        courseId:
+          type: integer
+          format: int64
+        student:
+          $ref: '#/components/schemas/StudentResponse'
+        enrollmentDate:
+          type: string
+          format: date-time
+        dropDate:
+          type: string
+          format: date-time
+    StudentResponse:
       type: object
       properties:
         id:
@@ -443,10 +487,21 @@ components:
         birth_date:
           type: string
           format: date
-        courses:
+        course:
           type: array
           items:
-            $ref: '#/components/schemas/Course'
+            $ref: '#/components/schemas/CourseResponse'
+      required:
+        - name
+        - birth_date
+    StudentRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        birth_date:
+          type: string
+          format: date
       required:
         - name
         - birth_date

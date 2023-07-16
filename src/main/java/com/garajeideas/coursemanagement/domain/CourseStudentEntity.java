@@ -1,9 +1,9 @@
 package com.garajeideas.coursemanagement.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,6 +15,9 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 @Table(name = "course_student")
 public class CourseStudentEntity implements Serializable {
 
@@ -25,9 +28,8 @@ public class CourseStudentEntity implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
-    private CourseEntity course;
+    private Long courseId;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)

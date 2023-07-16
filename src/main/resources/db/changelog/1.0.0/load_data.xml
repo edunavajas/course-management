@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="load_data" author="edu.navajas">
+        <loadData file="db/changelog/data/users.csv" separator="," tableName="user"/>
+        <loadData file="db/changelog/data/authority.csv" separator="," tableName="authority"/>
+        <loadData file="db/changelog/data/user_authority.csv" separator="," tableName="user_authority"/>
+        <loadData file="db/changelog/data/student.csv" separator="," tableName="student"/>
+        <loadData file="db/changelog/data/course.csv" separator="," tableName="course"/>
+        <loadData file="db/changelog/data/course_student.csv" separator="," tableName="course_student"/>
+    </changeSet>
+
+    <changeSet id="create_course_seq" author="edu.navajas">
+        <createSequence sequenceName="course_seq" startValue="11" incrementBy="1"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -46,7 +46,7 @@ public class TokenProvider {
 
         long now = (new Date()).getTime();
         Date validity;
-        validity = new Date(now + this.tokenValidity);
+        validity = new Date(now + 1000 * this.tokenValidity);
 
         return Jwts
             .builder()

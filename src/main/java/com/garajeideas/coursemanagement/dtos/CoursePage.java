@@ -1,17 +1,14 @@
 package com.garajeideas.coursemanagement.dtos;
 
-
-import com.garajeideas.coursemanagement.domain.CourseEntity;
 import lombok.*;
-
-
 import java.util.List;
 
 @Builder
+@Data
 @AllArgsConstructor
 public class CoursePage {
 
-	List<CourseEntity> content;
+	List<Course> content;
 
 	private Integer page;
 
@@ -21,13 +18,11 @@ public class CoursePage {
 
 	private Integer totalPages;
 
-	// Añadidos getters y setters por un conflicto del lombok con el mapper
-
-	public List<CourseEntity> getContent() {
+	public List<Course> getContent() {
 		return content;
 	}
 
-	public void setContent(List<CourseEntity> content) {
+	public void setContent(List<Course> content) {
 		this.content = content;
 	}
 
