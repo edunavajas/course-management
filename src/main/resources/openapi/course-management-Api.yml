@@ -169,32 +169,7 @@ paths:
         '404':
           description: Course not found
 
-  /courses/{courseId}/students/:
-    post:
-      tags:
-        - courses
-      summary: Enroll a student in a course
-      operationId: enrollStudentInCourse
-      parameters:
-        - name: courseId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StudentsPageResponse'
-      responses:
-        '201':
-          description: Student enrolled
-        '400':
-          description: Invalid input
-        '404':
-          description: Course not found
+  /courses/{courseId}/students:
     get:
       tags:
         - courses
@@ -215,10 +190,35 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/StudentResponse'
+                  $ref: '#/components/schemas/CourseStudentsResponse'
         '404':
           description: Course not found
   /courses/{courseId}/students/{studentId}:
+    post:
+      tags:
+        - courses
+      summary: Enroll a student in a course
+      operationId: enrollStudentInCourse
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '201':
+          description: Student enrolled
+        '400':
+          description: Invalid input
+        '404':
+          description: Course not found
     delete:
       tags:
         - courses
@@ -475,7 +475,7 @@ components:
           type: integer
         totalPages:
           type: integer
-    CourseStudents:
+    CourseStudentsResponse:
       type: object
       properties:
         id:

@@ -21,5 +21,8 @@
     <changeSet id="create_student_seq" author="edu.navajas">
         <createSequence sequenceName="student_seq" startValue="21" incrementBy="1"/>
     </changeSet>
+    <changeSet id="create_course_student_seq" author="edu.navajas">
+        <createSequence sequenceName="course_student_seq" startValue="11" incrementBy="1"/>
+    </changeSet>
 
 </databaseChangeLog>

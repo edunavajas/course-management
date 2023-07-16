@@ -12,7 +12,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -60,4 +59,60 @@ public class CourseEntity implements Serializable {
     @OneToMany(mappedBy = "courseId", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonManagedReference
     private Set<CourseStudentEntity> courseStudents;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getMaxStudentCount() {
+        return maxStudentCount;
+    }
+
+    public void setMaxStudentCount(Integer maxStudentCount) {
+        this.maxStudentCount = maxStudentCount;
+    }
+
+    public Instant getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Instant startDate) {
+        this.startDate = startDate;
+    }
+
+    public Instant getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Instant endDate) {
+        this.endDate = endDate;
+    }
+
+    public Instant getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Instant registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public Set<CourseStudentEntity> getCourseStudents() {
+        return courseStudents;
+    }
+
+    public void setCourseStudents(Set<CourseStudentEntity> courseStudents) {
+        this.courseStudents = courseStudents;
+    }
 }

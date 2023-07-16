@@ -1,9 +1,11 @@
 package com.garajeideas.coursemanagement.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,7 +26,8 @@ public class CourseStudentEntity implements Serializable {
     private static final long serialVersionUID = -6171775932178901032L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_student_seq")
+    @SequenceGenerator(name = "course_student_seq", sequenceName = "course_student_seq", allocationSize = 1, initialValue = 11)
     @Column(name = "id")
     private Long id;
 
@@ -41,4 +44,44 @@ public class CourseStudentEntity implements Serializable {
 
     @Column(name = "drop_date")
     private Instant dropDate;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+
+    public StudentEntity getStudent() {
+        return student;
+    }
+
+    public void setStudent(StudentEntity student) {
+        this.student = student;
+    }
+
+    public Instant getEnrollmentDate() {
+        return enrollmentDate;
+    }
+
+    public void setEnrollmentDate(Instant enrollmentDate) {
+        this.enrollmentDate = enrollmentDate;
+    }
+
+    public Instant getDropDate() {
+        return dropDate;
+    }
+
+    public void setDropDate(Instant dropDate) {
+        this.dropDate = dropDate;
+    }
 }
