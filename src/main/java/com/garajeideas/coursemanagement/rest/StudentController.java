@@ -46,7 +46,6 @@ public class StudentController implements StudentsApi {
     @Override
     public ResponseEntity<StudentResponse> getStudentById(Long id) {
         return ResponseEntity.ok(studentMapper.toResponse(studentService.getStudentById(id)));
-
     }
 
     @Override
