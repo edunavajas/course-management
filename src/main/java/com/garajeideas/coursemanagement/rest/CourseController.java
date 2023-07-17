@@ -40,6 +40,7 @@ public class CourseController implements CoursesApi {
     }
 
     @Override
+    @PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CourseResponse> addCourse(@Valid CourseRequest courseRequest) {
         CourseResponse courseResponse = (courseMapper.toResponse(
                 (courseService.addCourse(courseMapper.toDTO(courseRequest)))));
@@ -47,6 +48,7 @@ public class CourseController implements CoursesApi {
     }
 
     @Override
+    @PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteCourse(Long id) {
         courseService.deleteCourse(id);
         return ResponseEntity.noContent().build();
@@ -58,18 +60,19 @@ public class CourseController implements CoursesApi {
     }
 
     @Override
-    @PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CoursesPageResponse> getCourses(Integer page, Integer pageSize, String name, OffsetDateTime startDate, OffsetDateTime endDate) {
         return ResponseEntity
                 .ok(courseMapper.toPageResponse(courseService.getCourses(page, pageSize, name, startDate, endDate)));
     }
 
     @Override
+    @PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<CourseResponse> updateCourse(Long id, @Valid CourseRequest courseRequest) {
         return ResponseEntity.ok(courseMapper.toResponse(courseService.updateCourse(id, courseMapper.toDTO(courseRequest))));
     }
 
     @Override
+    @PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> enrollStudentInCourse(Long courseId, Long studentId) {
         courseStudentService.enrollStudentInCourse(courseId, studentId);
         return ResponseEntity.noContent().build();
@@ -81,6 +84,7 @@ public class CourseController implements CoursesApi {
     }
 
     @Override
+    @PreAuthorize(value = "hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> unenrollStudentFromCourse(Long courseId, Long studentId) {
         courseStudentService.unenrollStudentFromCourse(courseId, studentId);
         return ResponseEntity.noContent().build();
