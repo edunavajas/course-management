@@ -65,6 +65,7 @@ class CourseControllerTest {
 
         mockMvc.perform(post("/courses")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .with(user("admin").roles("ADMIN"))
                         .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(courseRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(courseResponse)));
@@ -75,6 +76,7 @@ class CourseControllerTest {
         Long courseId = 1L;
 
         mockMvc.perform(delete("/courses/" + courseId)
+                        .with(user("admin").roles("ADMIN"))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
@@ -89,6 +91,7 @@ class CourseControllerTest {
         when(courseMapper.toResponse(any(Course.class))).thenReturn(courseResponse);
 
         mockMvc.perform(get("/courses/" + courseId)
+                        .with(user("admin").roles("ADMIN"))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(courseResponse)));
@@ -127,6 +130,7 @@ class CourseControllerTest {
         when(courseMapper.toResponse(any(Course.class))).thenReturn(courseResponse);
 
         mockMvc.perform(put("/courses/" + courseId)
+                        .with(user("admin").roles("ADMIN"))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(courseRequest)))
                 .andExpect(status().isOk())
@@ -139,6 +143,7 @@ class CourseControllerTest {
         Long studentId = 1L;
 
         mockMvc.perform(post("/courses/" + courseId + "/students/" + studentId)
+                        .with(user("admin").roles("ADMIN"))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
@@ -153,6 +158,7 @@ class CourseControllerTest {
         when(courseStudentMapper.toResponseList(anyList())).thenReturn(courseStudentsResponseList);
 
         mockMvc.perform(get("/courses/" + courseId + "/students")
+                        .with(user("admin").roles("ADMIN"))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(courseStudentsResponseList)));
@@ -164,6 +170,7 @@ class CourseControllerTest {
         Long studentId = 1L;
 
         mockMvc.perform(delete("/courses/" + courseId + "/students/" + studentId)
+                        .with(user("admin").roles("ADMIN"))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 

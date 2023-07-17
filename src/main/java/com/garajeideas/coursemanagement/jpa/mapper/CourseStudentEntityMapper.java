@@ -4,14 +4,12 @@ import com.garajeideas.coursemanagement.domain.CourseStudentEntity;
 import com.garajeideas.coursemanagement.dtos.CourseStudent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CourseStudentEntityMapper {
 
-    CourseStudentEntityMapper INSTANCE = Mappers.getMapper(CourseStudentEntityMapper.class);
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "courseId", target = "courseId")

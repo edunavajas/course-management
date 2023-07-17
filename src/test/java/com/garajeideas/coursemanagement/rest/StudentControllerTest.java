@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -55,7 +56,8 @@ class StudentControllerTest {
         String studentRequestJson = objectMapper.writeValueAsString(studentRequest);
         String studentResponseJson = objectMapper.writeValueAsString(studentResponse);
 
-        mockMvc.perform(post("/students").contentType(MediaType.APPLICATION_JSON).content(studentRequestJson)).andExpect(status().isOk()).andExpect(content().json(studentResponseJson));
+        mockMvc.perform(post("/students").contentType(MediaType.APPLICATION_JSON)
+                .with(user("admin").roles("ADMIN")).content(studentRequestJson)).andExpect(status().isOk()).andExpect(content().json(studentResponseJson));
     }
 
     @Test
@@ -64,7 +66,8 @@ class StudentControllerTest {
 
         doNothing().when(studentService).deleteStudent(anyLong());
 
-        mockMvc.perform(delete("/students/{id}", studentId)).andExpect(status().isNoContent());
+        mockMvc.perform(delete("/students/{id}", studentId)
+                .with(user("admin").roles("ADMIN"))).andExpect(status().isNoContent());
     }
 
     @Test
@@ -74,7 +77,8 @@ class StudentControllerTest {
         when(studentMapper.toResponse(any(Student.class))).thenReturn(studentResponse);
         when(studentService.getStudentById(anyLong())).thenReturn(new Student());
 
-        mockMvc.perform(get("/students/{id}", studentId)).andExpect(status().isOk());
+        mockMvc.perform(get("/students/{id}", studentId)
+                .with(user("admin").roles("ADMIN"))).andExpect(status().isOk());
     }
 
     @Test
@@ -105,6 +109,7 @@ class StudentControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
         String studentRequestJson = objectMapper.writeValueAsString(studentRequest);
 
-        mockMvc.perform(put("/students/{id}", studentId).contentType(MediaType.APPLICATION_JSON).content(studentRequestJson)).andExpect(status().isOk());
+        mockMvc.perform(put("/students/{id}", studentId)
+                .with(user("admin").roles("ADMIN")).contentType(MediaType.APPLICATION_JSON).content(studentRequestJson)).andExpect(status().isOk());
     }
 }
