@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CourseServiceImplTest {
+class CourseServiceImplTest {
 
     @Mock
     private CourseJpaRepository courseJpaRepository;
@@ -45,7 +45,7 @@ public class CourseServiceImplTest {
     private CourseServiceImpl courseService;
 
     @Test
-    public void getCoursesTest() {
+    void getCoursesTest() {
 
         Page<CourseEntity> mockPage = new PageImpl<>(Collections.singletonList(new CourseEntity()));
         when(courseJpaRepository.findAll(any(CourseSpecification.class), any(Pageable.class))).thenReturn(mockPage);
@@ -60,7 +60,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    public void addCourseTest() {
+    void addCourseTest() {
 
         Course course = new Course();
         CourseEntity courseEntity = new CourseEntity();
@@ -83,7 +83,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    public void updateCourseTest_CourseNotFoundException() {
+    void updateCourseTest_CourseNotFoundException() {
 
         when(courseJpaRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -94,7 +94,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    public void deleteCourseTest_CourseNotFoundException() {
+    void deleteCourseTest_CourseNotFoundException() {
 
         when(courseJpaRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -103,7 +103,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    public void getCourseByIdTest_CourseNotFoundException() {
+    void getCourseByIdTest_CourseNotFoundException() {
 
         when(courseJpaRepository.findById(anyLong())).thenReturn(Optional.empty());
 
@@ -112,7 +112,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    public void updateCourseTest() {
+    void updateCourseTest() {
 
         CourseEntity existingEntity = new CourseEntity();
         existingEntity.setMaxStudentCount(10);
@@ -143,7 +143,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    public void deleteCourseTest() {
+    void deleteCourseTest() {
 
         when(courseJpaRepository.findById(anyLong())).thenReturn(Optional.of(new CourseEntity()));
         when(courseStudentService.getStudentsByCourseId(anyLong())).thenReturn(Collections.emptyList());
@@ -158,7 +158,7 @@ public class CourseServiceImplTest {
     }
 
     @Test
-    public void getCourseByIdTest() {
+    void getCourseByIdTest() {
 
         when(courseJpaRepository.findById(anyLong())).thenReturn(Optional.of(new CourseEntity()));
         when(courseEntityMapper.toDTO(any(CourseEntity.class))).thenReturn(new Course());

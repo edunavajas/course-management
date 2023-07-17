@@ -6,6 +6,7 @@ import javax.validation.ConstraintValidatorContext;
 public class ThreeNonWhitespaceCharactersValidator implements ConstraintValidator<ThreeNonWhitespaceCharacters, String> {
     @Override
     public void initialize(ThreeNonWhitespaceCharacters constraintAnnotation) {
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override

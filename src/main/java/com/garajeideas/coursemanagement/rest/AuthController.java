@@ -1,8 +1,8 @@
 package com.garajeideas.coursemanagement.rest;
 
 import com.garajeideas.coursemanagement.openapi.web.rest.AuthApi;
-import com.garajeideas.coursemanagement.openapi.web.rest.dtos.*;
-import com.garajeideas.coursemanagement.security.jwt.TokenProvider;
+import com.garajeideas.coursemanagement.openapi.web.rest.dtos.AuthenticationRequest;
+import com.garajeideas.coursemanagement.openapi.web.rest.dtos.AuthenticationResponse;
 import com.garajeideas.coursemanagement.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AuthController implements AuthApi {
 
-	private final AuthService authenticationService;
+    private final AuthService authenticationService;
 
-	@Override
-	public ResponseEntity<AuthenticationResponse> authenticateUser(AuthenticationRequest authenticationRequest) {
-		try {
-			AuthenticationResponse response = authenticationService.authenticate(authenticationRequest);
-			return ResponseEntity.ok(response);
-		} catch (AuthenticationException e) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		}
-	}
+    @Override
+    public ResponseEntity<AuthenticationResponse> authenticateUser(AuthenticationRequest authenticationRequest) {
+        try {
+            AuthenticationResponse response = authenticationService.authenticate(authenticationRequest);
+            return ResponseEntity.ok(response);
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
 }

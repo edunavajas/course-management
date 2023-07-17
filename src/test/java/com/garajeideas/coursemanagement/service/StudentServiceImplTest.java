@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class StudentServiceImplTest {
+class StudentServiceImplTest {
 
     @Mock
     private StudentJpaRepository studentJpaRepository;
@@ -41,7 +41,7 @@ public class StudentServiceImplTest {
     private StudentServiceImpl studentService;
 
     @Test
-    public void getStudentsTest() {
+    void getStudentsTest() {
         Page<StudentEntity> mockPage = new PageImpl<>(Collections.singletonList(new StudentEntity()));
         when(studentJpaRepository.findAll(any(StudentSpecification.class), any(Pageable.class))).thenReturn(mockPage);
 
@@ -53,7 +53,7 @@ public class StudentServiceImplTest {
     }
 
     @Test
-    public void addStudentTest() {
+    void addStudentTest() {
         Student student = new Student();
         StudentEntity studentEntity = new StudentEntity();
         when(studentEntityMapper.toEntity(any(Student.class))).thenReturn(studentEntity);
@@ -69,7 +69,7 @@ public class StudentServiceImplTest {
     }
 
     @Test
-    public void updateStudentTest() {
+    void updateStudentTest() {
         StudentEntity existingEntity = new StudentEntity();
         StudentEntity updatedEntity = new StudentEntity();
         Student student = new Student();
@@ -90,7 +90,7 @@ public class StudentServiceImplTest {
     }
 
     @Test
-    public void deleteStudentTest() {
+    void deleteStudentTest() {
         when(studentJpaRepository.findById(anyLong())).thenReturn(Optional.of(new StudentEntity()));
 
         studentService.deleteStudent(1L);
@@ -100,7 +100,7 @@ public class StudentServiceImplTest {
     }
 
     @Test
-    public void getStudentByIdTest() {
+    void getStudentByIdTest() {
         Student student = new Student();
         when(studentJpaRepository.findById(anyLong())).thenReturn(Optional.of(new StudentEntity()));
         when(studentEntityMapper.toDTO(any(StudentEntity.class))).thenReturn(student);
@@ -112,7 +112,7 @@ public class StudentServiceImplTest {
     }
 
     @Test
-    public void addStudentThrowsExceptionWhenDuplicatesFoundTest() {
+    void addStudentThrowsExceptionWhenDuplicatesFoundTest() {
         StudentEntity studentEntity = new StudentEntity();
         when(studentEntityMapper.toEntity(any(Student.class))).thenReturn(studentEntity);
         when(studentJpaRepository.findAll(any(StudentSpecification.class))).thenReturn(Collections.singletonList(studentEntity));
@@ -123,7 +123,7 @@ public class StudentServiceImplTest {
     }
 
     @Test
-    public void updateStudentThrowsExceptionWhenStudentNotFoundTest() {
+    void updateStudentThrowsExceptionWhenStudentNotFoundTest() {
         when(studentJpaRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         Student student = new Student();
@@ -132,7 +132,7 @@ public class StudentServiceImplTest {
     }
 
     @Test
-    public void updateStudentThrowsExceptionWhenDuplicatesFoundTest() {
+    void updateStudentThrowsExceptionWhenDuplicatesFoundTest() {
         StudentEntity existingEntity = new StudentEntity();
         StudentEntity updatedEntity = new StudentEntity();
         when(studentJpaRepository.findById(anyLong())).thenReturn(Optional.of(existingEntity));
@@ -145,14 +145,14 @@ public class StudentServiceImplTest {
     }
 
     @Test
-    public void deleteStudentThrowsExceptionWhenStudentNotFoundTest() {
+    void deleteStudentThrowsExceptionWhenStudentNotFoundTest() {
         when(studentJpaRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(StudentNotFoundException.class, () -> studentService.deleteStudent(1L));
     }
 
     @Test
-    public void getStudentByIdThrowsExceptionWhenStudentNotFoundTest() {
+    void getStudentByIdThrowsExceptionWhenStudentNotFoundTest() {
         when(studentJpaRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(StudentNotFoundException.class, () -> studentService.getStudentById(1L));

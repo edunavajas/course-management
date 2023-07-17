@@ -13,7 +13,5 @@ public interface CourseStudentJpaRepository extends JpaRepository<CourseStudentE
 
     List<CourseStudentEntity> getCourseStudentEntitiesByCourseIdAndDropDateIsNull(Long courseId);
 
-    Optional<CourseStudentEntity> getCourseStudentEntitiesByStudent_IdAndCourseIdAndDropDateIsNull(Long studentId, Long courseId);
-
     Optional<CourseStudentEntity> getCourseStudentEntitiesByStudent_IdAndCourseId(Long studentId, Long courseId);
 }

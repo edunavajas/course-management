@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser
 @SpringBootTest(classes = CourseManagementApplication.class)
-public class CourseControllerTest {
+class CourseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -56,7 +56,7 @@ public class CourseControllerTest {
     private CourseStudentMapper courseStudentMapper;
 
     @Test
-    public void addCourseTest() throws Exception {
+    void addCourseTest() throws Exception {
         CourseRequest courseRequest = CourseRequest.builder().name("Curso").maxStudentCount(5L).startDate(OffsetDateTime.now().plusDays(1)).endDate(OffsetDateTime.now().plusDays(3)).build();
         CourseResponse courseResponse = new CourseResponse();
         when(courseMapper.toDTO(any(CourseRequest.class))).thenReturn(new Course());
@@ -71,7 +71,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void deleteCourseTest() throws Exception {
+    void deleteCourseTest() throws Exception {
         Long courseId = 1L;
 
         mockMvc.perform(delete("/courses/" + courseId)
@@ -82,7 +82,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void getCourseByIdTest() throws Exception {
+    void getCourseByIdTest() throws Exception {
         Long courseId = 1L;
         CourseResponse courseResponse = new CourseResponse();
         when(courseService.getCourseById(courseId)).thenReturn(new Course());
@@ -95,7 +95,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void getCoursesTest() throws Exception {
+    void getCoursesTest() throws Exception {
         Integer page = 0;
         Integer pageSize = 10;
         CoursesPageResponse coursesPageResponse = new CoursesPageResponse();
@@ -118,7 +118,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void updateCourseTest() throws Exception {
+    void updateCourseTest() throws Exception {
         Long courseId = 1L;
         CourseRequest courseRequest = CourseRequest.builder().name("Curso").maxStudentCount(5L).startDate(OffsetDateTime.now().plusDays(1)).endDate(OffsetDateTime.now().plusDays(3)).build();
         CourseResponse courseResponse = new CourseResponse();
@@ -134,7 +134,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void enrollStudentInCourseTest() throws Exception {
+    void enrollStudentInCourseTest() throws Exception {
         Long courseId = 1L;
         Long studentId = 1L;
 
@@ -146,7 +146,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void getStudentsInCourseTest() throws Exception {
+    void getStudentsInCourseTest() throws Exception {
         Long courseId = 1L;
         List<CourseStudentsResponse> courseStudentsResponseList = new ArrayList<>();
         when(courseStudentService.getStudentsByCourseId(courseId)).thenReturn(new ArrayList<>());
@@ -159,7 +159,7 @@ public class CourseControllerTest {
     }
 
     @Test
-    public void unenrollStudentFromCourseTest() throws Exception {
+    void unenrollStudentFromCourseTest() throws Exception {
         Long courseId = 1L;
         Long studentId = 1L;
 

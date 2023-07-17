@@ -13,12 +13,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,13 +31,13 @@ public class TokenProvider {
     private final Key key;
     private final JwtParser jwtParser;
     private final SecurityMetersService securityMetersService;
-    private long tokenValidity;
+    private final long tokenValidity;
 
-    public TokenProvider(@Value("${jwt.secret}") String SECRET,@Value("${jwt.expiration}") long EXPIRATION, SecurityMetersService securityMetersService) {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
+    public TokenProvider(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") long expiration, SecurityMetersService securityMetersService) {
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
         key = Keys.hmacShaKeyFor(keyBytes);
         jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
-        this.tokenValidity = EXPIRATION;
+        this.tokenValidity = expiration;
         this.securityMetersService = securityMetersService;
     }
 
@@ -49,28 +49,27 @@ public class TokenProvider {
         validity = new Date(now + 1000 * this.tokenValidity);
 
         return Jwts
-            .builder()
-            .setSubject(authentication.getName())
-            .claim(AUTHORITIES_KEY, authorities)
-            .signWith(SignatureAlgorithm.HS512, key)
-            .setExpiration(validity)
-            .compact();
+                .builder()
+                .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
+                .signWith(SignatureAlgorithm.HS512, key)
+                .setExpiration(validity)
+                .compact();
     }
 
     public Authentication getAuthentication(String token) {
         Claims claims = jwtParser.parseClaimsJws(token).getBody();
 
         Collection<? extends GrantedAuthority> authorities = Arrays
-            .stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-            .filter(auth -> !auth.trim().isEmpty())
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toList());
+                .stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                .filter(auth -> !auth.trim().isEmpty())
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
 
         User principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
-
 
 
     public boolean validateToken(String authToken) {

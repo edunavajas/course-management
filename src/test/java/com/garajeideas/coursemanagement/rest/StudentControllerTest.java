@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser
 @SpringBootTest(classes = CourseManagementApplication.class)
-public class StudentControllerTest {
+class StudentControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,7 +43,7 @@ public class StudentControllerTest {
     private StudentMapper studentMapper;
 
     @Test
-    public void addStudentTest() throws Exception {
+    void addStudentTest() throws Exception {
         StudentRequest studentRequest = StudentRequest.builder().firstName("Edu").lastName("Navajas").birthDate(LocalDate.of(2000, 01, 01)).documentNumber("122").build();
         StudentResponse studentResponse = new StudentResponse();
         when(studentMapper.toDTO(any(StudentRequest.class))).thenReturn(new Student());
@@ -55,36 +55,30 @@ public class StudentControllerTest {
         String studentRequestJson = objectMapper.writeValueAsString(studentRequest);
         String studentResponseJson = objectMapper.writeValueAsString(studentResponse);
 
-        mockMvc.perform(post("/students")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(studentRequestJson))
-                .andExpect(status().isOk())
-                .andExpect(content().json(studentResponseJson));
+        mockMvc.perform(post("/students").contentType(MediaType.APPLICATION_JSON).content(studentRequestJson)).andExpect(status().isOk()).andExpect(content().json(studentResponseJson));
     }
 
     @Test
-    public void deleteStudentTest() throws Exception {
+    void deleteStudentTest() throws Exception {
         Long studentId = 1L;
 
         doNothing().when(studentService).deleteStudent(anyLong());
 
-        mockMvc.perform(delete("/students/{id}", studentId))
-                .andExpect(status().isNoContent());
+        mockMvc.perform(delete("/students/{id}", studentId)).andExpect(status().isNoContent());
     }
 
     @Test
-    public void getStudentByIdTest() throws Exception {
+    void getStudentByIdTest() throws Exception {
         Long studentId = 1L;
         StudentResponse studentResponse = new StudentResponse();
         when(studentMapper.toResponse(any(Student.class))).thenReturn(studentResponse);
         when(studentService.getStudentById(anyLong())).thenReturn(new Student());
 
-        mockMvc.perform(get("/students/{id}", studentId))
-                .andExpect(status().isOk());
+        mockMvc.perform(get("/students/{id}", studentId)).andExpect(status().isOk());
     }
 
     @Test
-    public void getStudentsTest() throws Exception {
+    void getStudentsTest() throws Exception {
         Integer page = 0;
         Integer pageSize = 10;
         String firstName = "John";
@@ -94,20 +88,13 @@ public class StudentControllerTest {
 
         StudentsPageResponse studentsPageResponse = new StudentsPageResponse();
         when(studentMapper.toPageResponse(any(StudentPage.class))).thenReturn(studentsPageResponse);
-        when(studentService.getStudents(anyInt(), anyInt(), anyString(), anyString(), any(LocalDate.class)))
-                .thenReturn(new StudentPage());
+        when(studentService.getStudents(anyInt(), anyInt(), anyString(), anyString(), any(LocalDate.class))).thenReturn(new StudentPage());
 
-        mockMvc.perform(get("/students")
-                        .param("page", page.toString())
-                        .param("pageSize", pageSize.toString())
-                        .param("firstName", firstName)
-                        .param("lastName", lastName)
-                        .param("birthDate", birthDate.toString()))
-                .andExpect(status().isOk());
+        mockMvc.perform(get("/students").param("page", page.toString()).param("pageSize", pageSize.toString()).param("firstName", firstName).param("lastName", lastName).param("birthDate", birthDate.toString())).andExpect(status().isOk());
     }
 
     @Test
-    public void updateStudentTest() throws Exception {
+    void updateStudentTest() throws Exception {
         Long studentId = 1L;
         StudentRequest studentRequest = StudentRequest.builder().firstName("Edu").lastName("Navajas").birthDate(LocalDate.of(2000, 01, 01)).documentNumber("122").build();
         StudentResponse studentResponse = new StudentResponse();
@@ -118,9 +105,6 @@ public class StudentControllerTest {
         objectMapper.registerModule(new JavaTimeModule());
         String studentRequestJson = objectMapper.writeValueAsString(studentRequest);
 
-        mockMvc.perform(put("/students/{id}", studentId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(studentRequestJson))
-                .andExpect(status().isOk());
+        mockMvc.perform(put("/students/{id}", studentId).contentType(MediaType.APPLICATION_JSON).content(studentRequestJson)).andExpect(status().isOk());
     }
 }
