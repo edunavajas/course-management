@@ -108,7 +108,6 @@ public class CourseControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        String response = objectMapper.writeValueAsString(coursesPageResponse);
 
         mockMvc.perform(get("/courses")
                         .param("page", page.toString())

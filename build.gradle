@@ -22,7 +22,7 @@ repositories {
     mavenCentral()
 }
 
-openApiGenerate {
+tasks.named('openApiGenerate') {
     generatorName = 'spring'
     inputSpec = "${projectDir}/src/main/resources/openapi/course-management-Api.yml"
     apiPackage = 'com.garajeideas.coursemanagement.openapi.web.rest'
@@ -34,6 +34,9 @@ openApiGenerate {
             additionalModelTypeAnnotations: '@lombok.AllArgsConstructor @lombok.Builder @lombok.NoArgsConstructor'
     ]
 }
+
+compileJava.dependsOn tasks.named('openApiGenerate')
+
 
 sourceSets {
     main.java.srcDirs += 'build/generate-resources/main/src/main/java'
