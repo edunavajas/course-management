@@ -5,7 +5,7 @@ plugins {
     id 'org.openapi.generator' version '5.2.0'
 }
 
-group = 'com.garajeideas'
+group = 'com.edunavajas'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -25,8 +25,8 @@ repositories {
 tasks.named('openApiGenerate') {
     generatorName = 'spring'
     inputSpec = "${projectDir}/src/main/resources/openapi/course-management-Api.yml"
-    apiPackage = 'com.garajeideas.coursemanagement.openapi.web.rest'
-    modelPackage = 'com.garajeideas.coursemanagement.openapi.web.rest.dtos'
+    apiPackage = 'com.edunavajas.coursemanagement.openapi.web.rest'
+    modelPackage = 'com.edunavajas.coursemanagement.openapi.web.rest.dtos'
     configOptions = [
             dateLibrary                   : 'java8',
             interfaceOnly                 : 'true',
